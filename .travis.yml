@@ -42,8 +42,33 @@ matrix:
         - docker
       script: docker run -v $PWD:/gdk greenaddress/ci@sha256:c4693baf6d3d1f6ef2acc9a10382c26c60ab8f78b17d6d5c8db6bbd668c4c7e1 /bin/bash -c "cd /gdk && ./tools/build.sh --gcc --enable-rust"
 
+env:
+    global:
+      SUBPROJECT_DIRS="subprojects/autobahn-cpp-bf40951174ab34b0202a0bab4c200237ee4d6e71 subprojects/boost_1_72_0 subprojects/GSL-7e99e76c9761d0d0b0848b91f8648830670ee872 subprojects/json-3.8.0 subprojects/libevent-release-2.1.11-stable subprojects/libwally-core-5776668e5dfa70f6c2d2ec8beaef319ba37beade subprojects/msgpack-3.2.1 subprojects/openssl-OpenSSL_1_1_1g subprojects/tor-tor-0.4.2.7 subprojects/websocketpp-1026e877449aeee27e0bb51746a96ab42d133652 subprojects/zlib-1.2.11"
+
+cache:
+    directories:
+        - $TRAVIS_BUILD_DIR/subprojects/packagecache
+        - $HOME/.cargo
+        - $TRAVIS_BUILD_DIR/target
+        - subprojects/autobahn-cpp-bf40951174ab34b0202a0bab4c200237ee4d6e71
+        - subprojects/boost_1_72_0
+        - subprojects/GSL-7e99e76c9761d0d0b0848b91f8648830670ee872
+        - subprojects/json-3.8.0
+        - subprojects/libevent-release-2.1.11-stable
+        - subprojects/libwally-core-5776668e5dfa70f6c2d2ec8beaef319ba37beade
+        - subprojects/msgpack-3.2.1
+        - subprojects/openssl-OpenSSL_1_1_1g
+        - subprojects/tor-tor-0.4.2.7
+        - subprojects/websocketpp-1026e877449aeee27e0bb51746a96ab42d133652
+        - subprojects/zlib-1.2.11
+
+before_cache:
+  - sudo chown -R travis:travis $TRAVIS_BUILD_DIR/subprojects/packagecache $HOME/.cargo $TRAVIS_BUILD_DIR/target $SUBPROJECT_DIRS
+
 before_install:
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo cp .travis.docker.json /etc/docker/daemon.json; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo systemctl daemon-reload; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo systemctl restart docker; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sleep 5; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then for d in "$SUBPROJECT_DIRS"; do rmdir --ignore-fail-on-non-empty $d; done; fi
