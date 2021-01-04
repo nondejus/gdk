@@ -41,3 +41,9 @@ matrix:
     - services:
         - docker
       script: docker run -v $PWD:/gdk greenaddress/ci@sha256:c4693baf6d3d1f6ef2acc9a10382c26c60ab8f78b17d6d5c8db6bbd668c4c7e1 /bin/bash -c "cd /gdk && ./tools/build.sh --gcc --enable-rust"
+
+before_install:
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo cp .travis.docker.json /etc/docker/daemon.json; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo systemctl daemon-reload; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo systemctl restart docker; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sleep 5; fi
