@@ -1,4 +1,4 @@
 {
-    "registry-mirrors": ["https://mirror.gcr.io", "https://registry-1.travis-ci.com"],
+    "registry-mirrors": ["https://mirror.gcr.io"],
     "mtu": 1460
 }
