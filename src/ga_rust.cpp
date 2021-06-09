@@ -180,11 +180,11 @@ namespace sdk {
     {
         throw std::runtime_error("register_subaccount_xpubs not implemented");
     }
-    nlohmann::json ga_rust::login(const std::string& mnemonic, const std::string& password)
+    nlohmann::json ga_rust::login(const std::string& mnemonic)
     {
         auto details = nlohmann::json{
             { "mnemonic", mnemonic },
-            { "password", password },
+            { "password", std::string() },
         };
 
         auto ret = call_session("login", details);
